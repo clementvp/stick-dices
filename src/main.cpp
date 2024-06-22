@@ -31,8 +31,8 @@ void loop()
 {
   M5.update();
   auto imu_update = M5.Imu.update();
-  static int dices[] = {4, 6, 8, 12, 20, 100};
-  static int dicesSize = 6;
+  static int dices[] = {4, 6, 8, 10, 12, 20, 100};
+  static int dicesSize = 7;
   float magnitude;
   static float shakeThreshold = 4;
   static int diceIndex = 0;
@@ -53,30 +53,33 @@ void loop()
     drawDiceType(dices[diceIndex]);
     M5.Speaker.tone(4000, 150);
     isReady = true;
-    lastButtonAState = currentButtonAState;
-
-    if (isReady)
-    {
-
-      if (magnitude > shakeThreshold)
-      {
-        long randNumber = random(1, dices[diceIndex] + 1);
-        drawResult(randNumber);
-        isReady = false;
-      }
-    }
-
-    if (M5.BtnB.isPressed())
-    {
-      M5.Speaker.tone(4700, 150);
-      diceIndex++;
-
-      if (diceIndex >= dicesSize)
-      {
-        diceIndex = 0;
-      }
-      drawDiceType(dices[diceIndex]);
-    }
-
-    delay(100);
   }
+
+  lastButtonAState = currentButtonAState;
+
+  if (isReady)
+  {
+
+    if (magnitude > shakeThreshold)
+    {
+
+      long randNumber = random(1, dices[diceIndex] + 1);
+      drawResult(randNumber);
+      isReady = false;
+    }
+  }
+
+  if (M5.BtnB.isPressed())
+  {
+    M5.Speaker.tone(4700, 150);
+    diceIndex++;
+
+    if (diceIndex >= dicesSize)
+    {
+      diceIndex = 0;
+    }
+    drawDiceType(dices[diceIndex]);
+  }
+
+  delay(100);
+}
