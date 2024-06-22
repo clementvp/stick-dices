@@ -13,7 +13,7 @@ void drawDiceType(int diceType)
 
 void setup()
 {
-  auto cfg = M5.config(); // Assign a structure for initializing M5Stack
+  auto cfg = M5.config();
   M5.begin(cfg);
   drawDiceType(3);
 }
@@ -29,7 +29,7 @@ void loop()
   static int diceIndex = 0;
 
   static bool isReady = false;
-  static bool lastButtonAState = false; // Variable pour stocker le dernier état du bouton
+  static bool lastButtonAState = false;
 
   if (imu_update)
   {
@@ -37,49 +37,43 @@ void loop()
     magnitude = sqrt(data.accel.x * data.accel.x + data.accel.y * data.accel.y + data.accel.z * data.accel.z);
   }
 
-  bool currentButtonAState = M5.BtnA.isPressed(); // Lit l'état actuel du bouton
+  bool currentButtonAState = M5.BtnA.isPressed();
 
-  // Vérifie si le bouton a été relâché et si l'état a changé
   if (currentButtonAState && !lastButtonAState)
   {
     drawDiceType(dices[diceIndex]);
     M5.Speaker.tone(4000, 150);
-    isReady = true; // Le bouton a été relâché, prêt à déclencher la fonction
-  }
+    isReady = true;
 
-  // Met à jour l'état précédent du bouton
-  lastButtonAState = currentButtonAState;
+    lastButtonAState = currentButtonAState;
 
-  if (isReady)
-  {
-
-    if (magnitude > shakeThreshold)
+    if (isReady)
     {
 
-      M5.Lcd.clear();
-      M5.Lcd.setTextColor(WHITE);
-      M5.Lcd.setTextSize(7);
-      long randNumber = random(1, dices[diceIndex] + 1);
-      M5.Lcd.setTextDatum(MC_DATUM);
-      M5.Lcd.drawNumber(randNumber, M5.Lcd.width() / 2, M5.Lcd.height() / 2);
-      isReady = false; // Réinitialise l'état pour nécessiter une nouvelle pression du bouton
+      if (magnitude > shakeThreshold)
+      {
+
+        M5.Lcd.clear();
+        M5.Lcd.setTextColor(WHITE);
+        M5.Lcd.setTextSize(7);
+        long randNumber = random(1, dices[diceIndex] + 1);
+        M5.Lcd.setTextDatum(MC_DATUM);
+        M5.Lcd.drawNumber(randNumber, M5.Lcd.width() / 2, M5.Lcd.height() / 2);
+        isReady = false;
+      }
     }
-  }
 
-  // Vérifier si le bouton a été appuyé
-  if (M5.BtnB.isPressed())
-  {
-    M5.Speaker.tone(4700, 150);
-    // Incrémenter l'index
-    diceIndex++;
-
-    // Revenir au début du tableau si on atteint la fin
-    if (diceIndex >= dicesSize)
+    if (M5.BtnB.isPressed())
     {
-      diceIndex = 0;
-    }
-    drawDiceType(dices[diceIndex]);
-  }
+      M5.Speaker.tone(4700, 150);
+      diceIndex++;
 
-  delay(100);
-}
+      if (diceIndex >= dicesSize)
+      {
+        diceIndex = 0;
+      }
+      drawDiceType(dices[diceIndex]);
+    }
+
+    delay(100);
+  }
