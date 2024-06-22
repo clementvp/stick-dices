@@ -11,6 +11,15 @@ void drawDiceType(int diceType)
   M5.Lcd.print(diceType);
 }
 
+void drawResult(int result)
+{
+  M5.Lcd.clear();
+  M5.Lcd.setTextColor(WHITE);
+  M5.Lcd.setTextSize(7);
+  M5.Lcd.setTextDatum(MC_DATUM);
+  M5.Lcd.drawNumber(result, M5.Lcd.width() / 2, M5.Lcd.height() / 2);
+}
+
 void setup()
 {
   auto cfg = M5.config();
@@ -44,7 +53,6 @@ void loop()
     drawDiceType(dices[diceIndex]);
     M5.Speaker.tone(4000, 150);
     isReady = true;
-
     lastButtonAState = currentButtonAState;
 
     if (isReady)
@@ -52,13 +60,8 @@ void loop()
 
       if (magnitude > shakeThreshold)
       {
-
-        M5.Lcd.clear();
-        M5.Lcd.setTextColor(WHITE);
-        M5.Lcd.setTextSize(7);
         long randNumber = random(1, dices[diceIndex] + 1);
-        M5.Lcd.setTextDatum(MC_DATUM);
-        M5.Lcd.drawNumber(randNumber, M5.Lcd.width() / 2, M5.Lcd.height() / 2);
+        drawResult(randNumber);
         isReady = false;
       }
     }
