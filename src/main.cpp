@@ -15,7 +15,7 @@ void setup()
 {
   auto cfg = M5.config();
   M5.begin(cfg);
-  drawDiceType(3);
+  drawDiceType(4);
 }
 
 void loop()
