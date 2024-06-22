@@ -32,7 +32,7 @@ void loop()
   M5.update();
   auto imu_update = M5.Imu.update();
   static int dices[] = {4, 6, 8, 10, 12, 20, 100};
-  static int dicesSize = 7;
+  static int dicesSize = sizeof(dices) / sizeof(dices[0]);
   float magnitude;
   static float shakeThreshold = 4;
   static int diceIndex = 0;
